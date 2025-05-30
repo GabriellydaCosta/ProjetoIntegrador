@@ -54,7 +54,7 @@
     <Button
         android:id="@+id/botaoSalvar"
         android:layout_width="214dp"
-        android:layout_height="47dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:text="Salvar Emoção"
         app:layout_constraintEnd_toEndOf="parent"
