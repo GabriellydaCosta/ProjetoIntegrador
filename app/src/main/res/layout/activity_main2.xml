@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/fundotelasentimentos"
+        android:src="@drawable/fundosentimentos"
         app:srcCompat="@drawable/fundosentimentos"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-91dp" />
@@ -37,6 +37,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gridEmojis"/>
 
+
+    <Button
+        android:id="@+id/buttonRegistros"
+        android:layout_width="283dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="@color/bluetitle"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="10dp"
+        android:text="Histórico de emoções"
+        android:textColor="@color/white"
+        android:textSize="19dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gridEmojis" />
+
     <TextView
         android:id="@+id/textBemVindo"
         android:layout_width="wrap_content"
@@ -48,7 +64,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageAvatar" />
+        app:layout_constraintTop_toBottomOf="@id/avatar_aluno" />
 
     <TextView
         android:id="@+id/textPergunta"
@@ -79,6 +95,7 @@
         app:useDefaultMargins="true">
 
         <!-- emoji feliz -->
+        <!-- emoji feliz -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,6 +103,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiFeliz"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -93,7 +111,6 @@
                 android:contentDescription="Feliz"
                 android:scaleType="fitCenter"
                 android:src="@drawable/feliz" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,6 +128,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiTriste"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -118,7 +136,6 @@
                 android:contentDescription="Triste"
                 android:scaleType="fitCenter"
                 android:src="@drawable/triste" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -128,7 +145,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
         <!-- emoji bravo -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -137,6 +153,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiBravo"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -144,7 +161,6 @@
                 android:contentDescription="Bravo"
                 android:scaleType="fitCenter"
                 android:src="@drawable/bravo" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -154,7 +170,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
         <!-- emoji assustado -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -163,6 +178,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiAssustado"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -170,7 +186,6 @@
                 android:contentDescription="Assustado"
                 android:scaleType="fitCenter"
                 android:src="@drawable/assustado" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -180,8 +195,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
-        <!-- emoji Neutro -->
+        <!-- emoji neutro -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -189,6 +203,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiNeutro"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -196,7 +211,6 @@
                 android:contentDescription="Neutro"
                 android:scaleType="fitCenter"
                 android:src="@drawable/neutro" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -206,7 +220,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
         <!-- emoji confuso -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -215,6 +228,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiConfuso"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -223,14 +237,12 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/confuso" />
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Confuso"
                 android:textColor="#000"
                 android:textSize="12sp" />
-
         </LinearLayout>
 
         <!-- emoji cansado -->
@@ -241,6 +253,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiCansado"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -248,7 +261,6 @@
                 android:contentDescription="Cansado"
                 android:scaleType="fitCenter"
                 android:src="@drawable/cansado" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -258,7 +270,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- emoji Doente -->
+        <!-- emoji doente -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -266,6 +278,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiDoente"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -273,7 +286,6 @@
                 android:contentDescription="Doente"
                 android:scaleType="fitCenter"
                 android:src="@drawable/doente" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -291,6 +303,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiConfiante"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -298,7 +311,6 @@
                 android:contentDescription="Confiante"
                 android:scaleType="fitCenter"
                 android:src="@drawable/confiante" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -308,7 +320,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
         <!-- emoji animado -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -317,6 +328,7 @@
             android:orientation="vertical">
 
             <ImageButton
+                android:id="@+id/emojiAnimado"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
@@ -324,7 +336,6 @@
                 android:contentDescription="Animado"
                 android:scaleType="fitCenter"
                 android:src="@drawable/animado" />
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -334,21 +345,20 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
         <!-- Adicione os demais emojis aqui... -->
 
     </androidx.gridlayout.widget.GridLayout>
 
     <ImageView
-        android:id="@+id/imageAvatar"
+        android:id="@+id/avatar_aluno"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/avatar_aluno"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Rodapé com ícones -->
 

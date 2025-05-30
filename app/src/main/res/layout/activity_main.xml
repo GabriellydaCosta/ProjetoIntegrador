@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:text="IncluseWatch"
         android:textColor="@color/bluetitle"
-        android:textSize="36dp"
+        android:textSize="36sp"
         android:textStyle="bold"
         android:shadowColor="@android:color/white"
         android:shadowDx="6"
