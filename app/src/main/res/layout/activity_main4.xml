@@ -21,7 +21,8 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:paddingTop="40dp"/>
 
         <!-- Foto e dados principais -->
         <androidx.cardview.widget.CardView
@@ -56,33 +57,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nome: João"
-                        android:textStyle="bold"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Idade: 8 anos"
                         android:layout_marginTop="4dp"
-                        android:textSize="16sp"
-                        android:textColor="#555" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Temperatura: 28.6°C"
-                        android:layout_marginTop="4dp"
-                        android:textSize="16sp"
-                        android:textColor="#0097A7" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Batimentos: 86 bpm"
-                        android:layout_marginTop="4dp"
+                        android:textColor="#D32F2F"
                         android:textSize="16sp"
-                        android:textColor="#D32F2F" />
+                        android:textStyle="bold"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -100,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nome do Aluno"
                 android:textSize="18sp"
-                android:textColor="#000"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
@@ -108,9 +87,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Batimentos cardíacos"
+                android:text="Idade"
                 android:textSize="18sp"
-                android:textColor="#000"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="8dp" />
@@ -121,7 +100,47 @@
                 android:layout_height="wrap_content"
                 android:text="Responsáveis"
                 android:textSize="18sp"
-                android:textColor="#000"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Número da sala de aula"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Turno de estudo"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telefone do aluno"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telefone do responsável"
+                android:textSize="18sp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="8dp" />
@@ -133,9 +152,9 @@
             android:id="@+id/btnMood"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mood Mood"
-            android:backgroundTint="#4DD0E1"
-            android:textColor="#FFFFFF"
+            android:text="Ir para registro de emoção"
+            android:backgroundTint="@color/bluetitle"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="8dp"

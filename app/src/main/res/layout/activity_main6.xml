@@ -1,0 +1,93 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="26dp"
+    >
+
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="50dp">
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/txtTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cadastro de Informações"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp"
+            android:textAlignment="center"
+            android:paddingBottom="30dp"/>
+
+        <!-- Nome do Aluno -->
+        <EditText
+            android:id="@+id/edtNome"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Nome do Aluno"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Idade -->
+        <EditText
+            android:id="@+id/edtIdade"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Idade"
+            android:inputType="number"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Responsável -->
+        <EditText
+            android:id="@+id/edtResponsavel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Responsável"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Número da sala -->
+        <EditText
+            android:id="@+id/edtSala"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Número da sala"
+            android:inputType="text"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Turno de estudo -->
+        <EditText
+            android:id="@+id/edtTurno"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Turno de estudo"
+            android:inputType="text"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Telefone do aluno -->
+        <EditText
+            android:id="@+id/edtTelefoneAluno"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Telefone do aluno"
+            android:inputType="phone"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Telefone do responsável -->
+        <EditText
+            android:id="@+id/edtTelefoneResponsavel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Telefone do responsável"
+            android:inputType="phone"
+            android:layout_marginBottom="8dp" />
+
+
+        <Button
+            android:id="@+id/btnSalvar"
+            android:text="Salvar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>
