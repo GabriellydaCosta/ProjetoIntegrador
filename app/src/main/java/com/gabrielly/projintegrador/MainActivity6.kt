@@ -2,17 +2,18 @@ package com.gabrielly.projintegrador
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.gabrielly.projintegrador.databinding.ActivityMain6Binding
 
-class MainActivity6 : BaseActivity() {
+class MainActivity6 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain6Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setActivityLayout(R.layout.activity_main6) // inflar o conteúdo no Drawer
 
-        binding = ActivityMain6Binding.bind(findViewById(R.id.content_frame)) // usa o conteúdo dentro do frame
+        binding = ActivityMain6Binding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val prefs = getSharedPreferences("dadosAluno", MODE_PRIVATE)
 

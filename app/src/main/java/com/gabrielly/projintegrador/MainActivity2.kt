@@ -2,6 +2,8 @@ package com.gabrielly.projintegrador
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +16,10 @@ class MainActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
 
         // Referências dos ImageButtons dos emojis
         val emojiFeliz = findViewById<ImageButton>(R.id.emojiFeliz)
@@ -66,5 +72,47 @@ class MainActivity2 : AppCompatActivity() {
         intent.putExtra("EMOCAO", emocao)
         startActivity(intent)
     }
-}
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_principal, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_mood -> {
+                val intent = Intent(this, MainActivity2::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_perfil -> {
+                val intent = Intent(this, MainActivity4::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_historico -> {
+                val intent = Intent(this, MainActivity5::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_cadastro -> {
+                val intent = Intent(this, MainActivity6::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_areaprofessor -> {
+                val intent = Intent(this, MainActivity3::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_sair -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish() // Fecha a tela atual
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+}

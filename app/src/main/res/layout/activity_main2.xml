@@ -7,8 +7,6 @@
     android:background="#EAF3F3">
 
     <!-- Avatar -->
-
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -20,6 +18,16 @@
         app:srcCompat="@drawable/fundosentimentos"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-91dp" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:paddingTop="20dp"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bluetitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <Button
