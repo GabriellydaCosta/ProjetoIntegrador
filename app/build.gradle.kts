@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
 }
 
 android {
@@ -52,5 +53,6 @@ dependencies {
     implementation ("androidx.gridlayout:gridlayout:1.0.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.recyclerview:recyclerview:1.3.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 
 }

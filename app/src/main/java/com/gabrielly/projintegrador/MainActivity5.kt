@@ -1,8 +1,10 @@
 package com.gabrielly.projintegrador
 
+import android.view.MenuItem
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ArrayAdapter
@@ -19,6 +21,9 @@ class MainActivity5 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main5)
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         textoEmocaoRegistrada = findViewById(R.id.textoEmocaoRegistrada)
         spinnerEmocoes = Spinner(this) // Se ainda não estiver no layout, ajuste isso no XML
@@ -79,5 +84,47 @@ class MainActivity5 : AppCompatActivity() {
     private fun obterDataHoraAtual(): String {
         val agora = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
         return agora.format(java.util.Date())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_principal, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_mood -> {
+                val intent = Intent(this, MainActivity2::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_perfil -> {
+                val intent = Intent(this, MainActivity4::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_historico -> {
+                val intent = Intent(this, MainActivity5::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_cadastro -> {
+                val intent = Intent(this, MainActivity6::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_areaprofessor -> {
+                val intent = Intent(this, MainActivity3::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.nav_sair -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish() // Fecha a tela atual
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
