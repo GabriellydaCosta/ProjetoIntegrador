@@ -1,5 +1,3 @@
-package com.gabrielly.projintegrador
-
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +10,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import android.content.Context
 import android.widget.*
+import com.gabrielly.projintegrador.MainActivity2
+import com.gabrielly.projintegrador.R
+
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -32,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("UsuariosPrefs", Context.MODE_PRIVATE)
 
+
         buttonLogin.setOnClickListener {
             val matricula = editTextMatricula.text.toString()
             val senha = editTextSenha.text.toString()
@@ -40,7 +43,12 @@ class LoginActivity : AppCompatActivity() {
 
             if (senhaSalva != null && senhaSalva == senha) {
                 Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
-                // Exemplo: ir para a tela principal
+
+                // Salva o usuário logado
+                val prefsLogin = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+                prefsLogin.edit().putString("usuarioLogado", matricula).apply()
+
+                // Vai para a próxima tela
                 val intent = Intent(this, MainActivity2::class.java)
                 startActivity(intent)
                 finish()
@@ -49,18 +57,5 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        buttonCriarConta.setOnClickListener {
-            val matricula = editTextMatricula.text.toString()
-            val senha = editTextSenha.text.toString()
-
-            if (matricula.isBlank() || senha.isBlank()) {
-                Toast.makeText(this, "Preencha matrícula e senha", Toast.LENGTH_SHORT).show()
-            } else if (prefs.contains(matricula)) {
-                Toast.makeText(this, "Conta já existe!", Toast.LENGTH_SHORT).show()
-            } else {
-                prefs.edit().putString(matricula, senha).apply()
-                Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }

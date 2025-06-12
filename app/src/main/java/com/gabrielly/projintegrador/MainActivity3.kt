@@ -48,13 +48,13 @@ class MainActivity3 : AppCompatActivity() {
     }
 
     private fun carregarAlunos() {
-        val sharedPrefs = getSharedPreferences("alunosCadastrados", MODE_PRIVATE)
-        val alunosJsonSet = sharedPrefs.getStringSet("listaAlunos", emptySet()) ?: emptySet()
+        val sharedPrefs = getSharedPreferences("alunosPorUsuario", MODE_PRIVATE)
+        val allEntries = sharedPrefs.all
 
         val gson = Gson()
-        val listaAlunos = alunosJsonSet.mapNotNull { jsonAluno ->
+        val listaAlunos = allEntries.values.mapNotNull { value ->
             try {
-                gson.fromJson(jsonAluno, Aluno::class.java)
+                gson.fromJson(value as String, Aluno::class.java)
             } catch (e: Exception) {
                 null
             }

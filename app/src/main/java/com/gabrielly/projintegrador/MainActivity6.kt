@@ -1,9 +1,10 @@
 package com.gabrielly.projintegrador
 
-import android.view.MenuItem
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gabrielly.projintegrador.databinding.ActivityMain6Binding
 import com.google.gson.Gson
@@ -11,6 +12,7 @@ import com.google.gson.Gson
 class MainActivity6 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain6Binding
+    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,82 +20,59 @@ class MainActivity6 : AppCompatActivity() {
         binding = ActivityMain6Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val prefs = getSharedPreferences("dadosAluno", MODE_PRIVATE)
-
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
         binding.btnSalvar.setOnClickListener {
-            val editor = prefs.edit()
-            editor.putString("nome", binding.edtNome.text.toString())
-            editor.putString("idade", binding.edtIdade.text.toString())
-            editor.putString("responsavel", binding.edtResponsavel.text.toString())
-            editor.putString("sala", binding.edtSala.text.toString())
-            editor.putString("turno", binding.edtTurno.text.toString())
-            editor.putString("telefoneAluno", binding.edtTelefoneAluno.text.toString())
-            editor.putString("telefoneResponsavel", binding.edtTelefoneResponsavel.text.toString())
-            editor.apply()
+            val nome = binding.edtNome.text.toString().trim()
+            val idadeStr = binding.edtIdade.text.toString().trim()
+            val responsavel = binding.edtResponsavel.text.toString().trim()
+            val sala = binding.edtSala.text.toString().trim()
+            val turno = binding.edtTurno.text.toString().trim()
+            val telefoneAluno = binding.edtTelefoneAluno.text.toString().trim()
+            val telefoneResponsavel = binding.edtTelefoneResponsavel.text.toString().trim()
+
+            if (nome.isEmpty()) {
+                Toast.makeText(this, "Por favor, insira o nome do aluno.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val idade = idadeStr.toIntOrNull() ?: 0
 
             val novoAluno = Aluno(
-                nome = binding.edtNome.text.toString(),
-                idade = binding.edtIdade.text.toString().toIntOrNull() ?: 0,
+                nome = nome,
+                idade = idade,
                 avatarResId = R.drawable.avatar_aluno,
-                responsavel = binding.edtResponsavel.text.toString(),
-                sala = binding.edtSala.text.toString(),
-                turno = binding.edtTurno.text.toString(),
-                telefoneAluno = binding.edtTelefoneAluno.text.toString(),
-                telefoneResponsavel = binding.edtTelefoneResponsavel.text.toString()
+                responsavel = responsavel,
+                sala = sala,
+                turno = turno,
+                telefoneAluno = telefoneAluno,
+                telefoneResponsavel = telefoneResponsavel
             )
 
-            salvarAlunoNaLista()
+            salvarAlunoDoUsuario(novoAluno) // Salva o aluno vinculado ao usuário atual
 
-            val gson = Gson()
             val alunoJson = gson.toJson(novoAluno)
-
             val intent = Intent(this, MainActivity4::class.java)
             intent.putExtra("alunoJson", alunoJson)
             startActivity(intent)
             finish()
         }
-
-
     }
 
-    private fun salvarAlunoNaLista() {
-        val sharedPrefs = getSharedPreferences("alunosCadastrados", MODE_PRIVATE)
+    private fun salvarAlunoDoUsuario(aluno: Aluno) {
+        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
+        val usuarioLogado = prefsLogin.getString("usuarioLogado", null)
+
+        if (usuarioLogado == null) {
+            Toast.makeText(this, "Usuário não está logado.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val sharedPrefs = getSharedPreferences("alunosPorUsuario", MODE_PRIVATE)
         val editor = sharedPrefs.edit()
 
-        val nome = binding.edtNome.text.toString()
-        val idade = binding.edtIdade.text.toString().toIntOrNull() ?: 0
-        val responsavel = binding.edtResponsavel.text.toString()
-        val sala = binding.edtSala.text.toString()
-        val turno = binding.edtTurno.text.toString()
-        val telefoneAluno = binding.edtTelefoneAluno.text.toString()
-        val telefoneResponsavel = binding.edtTelefoneResponsavel.text.toString()
-
-        val novoAluno = Aluno(
-            nome = nome,
-            idade = idade,
-            avatarResId = R.drawable.avatar_aluno, // substitua pelo ícone padrão desejado
-            responsavel = responsavel,
-            sala = sala,
-            turno = turno,
-            telefoneAluno = telefoneAluno,
-            telefoneResponsavel = telefoneResponsavel
-        )
-
-        // Serializa o aluno para JSON
-        val gson = com.google.gson.Gson()
-        val jsonAluno = gson.toJson(novoAluno)
-
-        // Recupera a lista existente
-        val alunosJson = sharedPrefs.getStringSet("listaAlunos", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
-        alunosJson.add(jsonAluno)
-
-        editor.putStringSet("listaAlunos", alunosJson)
+        val alunoJson = gson.toJson(aluno)
+        editor.putString(usuarioLogado, alunoJson) // Salva/atualiza o aluno do usuário logado
         editor.apply()
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
@@ -103,34 +82,28 @@ class MainActivity6 : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_mood -> {
-                val intent = Intent(this, MainActivity2::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, MainActivity2::class.java))
                 return true
             }
             R.id.nav_perfil -> {
-                val intent = Intent(this, MainActivity4::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, MainActivity4::class.java))
                 return true
             }
             R.id.nav_historico -> {
-                val intent = Intent(this, MainActivity5::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, MainActivity5::class.java))
                 return true
             }
             R.id.nav_cadastro -> {
-                val intent = Intent(this, MainActivity6::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, MainActivity6::class.java))
                 return true
             }
             R.id.nav_areaprofessor -> {
-                val intent = Intent(this, MainActivity3::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, MainActivity3::class.java))
                 return true
             }
             R.id.nav_sair -> {
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish() // Fecha a tela atual
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
                 return true
             }
         }
