@@ -23,7 +23,15 @@ class MainActivity4 : AppCompatActivity() {
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        mostrarAlunoDoUsuarioLogado()
+        // ✅ Verifica se foi passado aluno via Intent (caso vindo do professor)
+        val alunoJsonIntent = intent.getStringExtra("alunoJson")
+        if (alunoJsonIntent != null) {
+            val aluno = gson.fromJson(alunoJsonIntent, Aluno::class.java)
+            exibirDadosAluno(aluno)
+        } else {
+            // ✅ Caso contrário, mostra o aluno logado normalmente
+            mostrarAlunoDoUsuarioLogado()
+        }
     }
 
     private fun mostrarAlunoDoUsuarioLogado() {
@@ -93,4 +101,3 @@ class MainActivity4 : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 }
-

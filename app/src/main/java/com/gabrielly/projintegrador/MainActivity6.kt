@@ -70,9 +70,12 @@ class MainActivity6 : AppCompatActivity() {
         val editor = sharedPrefs.edit()
 
         val alunoJson = gson.toJson(aluno)
-        editor.putString(usuarioLogado, alunoJson) // Salva/atualiza o aluno do usuário logado
+
+        // Salva o cadastro APENAS para o usuário logado (por matrícula)
+        editor.putString(usuarioLogado, alunoJson)
         editor.apply()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
