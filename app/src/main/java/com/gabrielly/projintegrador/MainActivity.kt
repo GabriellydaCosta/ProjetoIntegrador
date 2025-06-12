@@ -1,20 +1,10 @@
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.content.Intent
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+package com.gabrielly.projintegrador
+
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.widget.*
-import com.gabrielly.projintegrador.MainActivity2
-import com.gabrielly.projintegrador.R
-
-
-
+import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -33,29 +23,43 @@ class LoginActivity : AppCompatActivity() {
         buttonCriarConta = findViewById(R.id.buttonAjuda)
 
         val prefs = getSharedPreferences("UsuariosPrefs", Context.MODE_PRIVATE)
-
+        val prefsLogin = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
 
         buttonLogin.setOnClickListener {
-            val matricula = editTextMatricula.text.toString()
-            val senha = editTextSenha.text.toString()
+            val matricula = editTextMatricula.text.toString().trim()
+            val senha = editTextSenha.text.toString().trim()
 
+            // Login do professor
+            if (matricula == "professor@ifes.edu.br" && senha == "napne") {
+                prefsLogin.edit()
+                    .putString("usuarioLogado", matricula)
+                    .putString("tipoUsuario", "professor")
+                    .apply()
+
+                Toast.makeText(this, "Login do professor realizado com sucesso!", Toast.LENGTH_SHORT).show()
+
+                // Vai para a área do professor
+                startActivity(Intent(this, MainActivity3::class.java))
+                finish()
+                return@setOnClickListener
+            }
+
+            // Login do aluno (verifica nos prefs)
             val senhaSalva = prefs.getString(matricula, null)
-
             if (senhaSalva != null && senhaSalva == senha) {
-                Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
+                prefsLogin.edit()
+                    .putString("usuarioLogado", matricula)
+                    .putString("tipoUsuario", "aluno")
+                    .apply()
 
-                // Salva o usuário logado
-                val prefsLogin = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
-                prefsLogin.edit().putString("usuarioLogado", matricula).apply()
+                Toast.makeText(this, "Login do aluno realizado com sucesso!", Toast.LENGTH_SHORT).show()
 
-                // Vai para a próxima tela
-                val intent = Intent(this, MainActivity2::class.java)
-                startActivity(intent)
+                // Vai para a área do aluno
+                startActivity(Intent(this, MainActivity2::class.java))
                 finish()
             } else {
                 Toast.makeText(this, "Login ou senha incorretos!", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 }
