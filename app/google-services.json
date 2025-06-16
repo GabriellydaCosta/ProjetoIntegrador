@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "427939267030",
+    "project_id": "projeto-integrador-a747f",
+    "storage_bucket": "projeto-integrador-a747f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427939267030:android:5a52c282274d9a4d472477",
+        "android_client_info": {
+          "package_name": "com.gabrielly.projintegrador"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqElVjgJYwsaghSOarjFfjvWOQ0kTVOl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
