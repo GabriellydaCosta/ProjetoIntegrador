@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
         editTextMatricula = findViewById(R.id.editTextMatricula)
         editTextSenha = findViewById(R.id.editTextSenha)
         buttonLogin = findViewById(R.id.buttonLogin)
-        buttonCriarConta = findViewById(R.id.buttonAjuda)
+        buttonCriarConta = findViewById(R.id.buttonAjuda) // Mantendo o nome correto
 
         val prefs = getSharedPreferences("UsuariosPrefs", Context.MODE_PRIVATE)
         val prefsLogin = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
@@ -37,8 +37,6 @@ class LoginActivity : AppCompatActivity() {
                     .apply()
 
                 Toast.makeText(this, "Login do professor realizado com sucesso!", Toast.LENGTH_SHORT).show()
-
-                // Vai para a área do professor
                 startActivity(Intent(this, MainActivity3::class.java))
                 finish()
                 return@setOnClickListener
@@ -53,13 +51,31 @@ class LoginActivity : AppCompatActivity() {
                     .apply()
 
                 Toast.makeText(this, "Login do aluno realizado com sucesso!", Toast.LENGTH_SHORT).show()
-
-                // Vai para a área do aluno
                 startActivity(Intent(this, MainActivity2::class.java))
                 finish()
             } else {
                 Toast.makeText(this, "Login ou senha incorretos!", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Criar conta na mesma tela de login
+        buttonCriarConta.setOnClickListener {
+            val matricula = editTextMatricula.text.toString().trim()
+            val senha = editTextSenha.text.toString().trim()
+
+            if (matricula.isNotEmpty() && senha.isNotEmpty()) {
+                val senhaExistente = prefs.getString(matricula, null)
+
+                if (senhaExistente != null) {
+                    Toast.makeText(this, "Este e-mail já está cadastrado!", Toast.LENGTH_SHORT).show()
+                } else {
+                    prefs.edit().putString(matricula, senha).apply()
+                    Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Preencha todos os campos para criar uma conta!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }

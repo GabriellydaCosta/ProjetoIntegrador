@@ -20,6 +20,9 @@ class MainActivity6 : AppCompatActivity() {
         binding = ActivityMain6Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // ✅ Garante que a Toolbar funcione com o menu
+        setSupportActionBar(findViewById(R.id.toolbar))
+
         binding.btnSalvar.setOnClickListener {
             val nome = binding.edtNome.text.toString().trim()
             val idadeStr = binding.edtIdade.text.toString().trim()
@@ -47,7 +50,7 @@ class MainActivity6 : AppCompatActivity() {
                 telefoneResponsavel = telefoneResponsavel
             )
 
-            salvarAlunoDoUsuario(novoAluno) // Salva o aluno vinculado ao usuário atual
+            salvarAlunoDoUsuario(novoAluno)
 
             val alunoJson = gson.toJson(novoAluno)
             val intent = Intent(this, MainActivity4::class.java)
@@ -70,15 +73,20 @@ class MainActivity6 : AppCompatActivity() {
         val editor = sharedPrefs.edit()
 
         val alunoJson = gson.toJson(aluno)
-
-        // Salva o cadastro APENAS para o usuário logado (por matrícula)
         editor.putString(usuarioLogado, alunoJson)
         editor.apply()
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
+
+        // ✅ Exemplo opcional: esconder Área do Professor se não for professor
+        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
+        val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
+        if (tipoUsuario != "professor") {
+            menu?.findItem(R.id.nav_areaprofessor)?.isVisible = false
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 

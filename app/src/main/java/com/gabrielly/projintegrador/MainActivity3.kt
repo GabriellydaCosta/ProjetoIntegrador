@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,18 @@ class MainActivity3 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 🔒 Verifica se o usuário logado é um professor
+        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
+        val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
+
+        if (tipoUsuario != "professor") {
+            Toast.makeText(this, "Acesso restrito ao professor.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_main3)
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
@@ -29,19 +42,34 @@ class MainActivity3 : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
+
+        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
+        val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
+
+        if (tipoUsuario == "professor") {
+            // Oculta todas as opções exceto "Área do Professor" e "Sair"
+            menu?.findItem(R.id.nav_mood)?.isVisible = false
+            menu?.findItem(R.id.nav_perfil)?.isVisible = false
+            menu?.findItem(R.id.nav_historico)?.isVisible = false
+            menu?.findItem(R.id.nav_cadastro)?.isVisible = false
+            menu?.findItem(R.id.nav_areaprofessor)?.isVisible = true
+            menu?.findItem(R.id.nav_sair)?.isVisible = true
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_mood -> startActivity(Intent(this, MainActivity2::class.java))
-            R.id.nav_perfil -> startActivity(Intent(this, MainActivity4::class.java))
-            R.id.nav_historico -> startActivity(Intent(this, MainActivity5::class.java))
-            R.id.nav_cadastro -> startActivity(Intent(this, MainActivity6::class.java))
-            R.id.nav_areaprofessor -> startActivity(Intent(this, MainActivity3::class.java))
+            R.id.nav_areaprofessor -> {
+                startActivity(Intent(this, MainActivity3::class.java))
+                return true
+            }
+
             R.id.nav_sair -> {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
@@ -69,3 +97,4 @@ class MainActivity3 : AppCompatActivity() {
         recyclerAlunos.adapter = adapter
     }
 }
+
