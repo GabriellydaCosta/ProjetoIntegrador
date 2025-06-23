@@ -8,17 +8,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class MainActivity3 : AppCompatActivity() {
 
     private lateinit var recyclerAlunos: RecyclerView
     private lateinit var adapter: AlunoAdapter
+    private val listaAlunos = mutableListOf<Aluno>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 🔒 Verifica se o usuário logado é um professor
+        // Verifica se o usuário é professor (proteção extra)
         val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
 
@@ -37,7 +39,7 @@ class MainActivity3 : AppCompatActivity() {
         recyclerAlunos = findViewById(R.id.recyclerAlunos)
         recyclerAlunos.layoutManager = GridLayoutManager(this, 3)
 
-        carregarAlunos()
+        carregarAlunosFirebase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,7 +49,7 @@ class MainActivity3 : AppCompatActivity() {
         val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
 
         if (tipoUsuario == "professor") {
-            // Oculta todas as opções exceto "Área do Professor" e "Sair"
+            // Deixa visíveis só as opções necessárias para professor
             menu?.findItem(R.id.nav_mood)?.isVisible = false
             menu?.findItem(R.id.nav_perfil)?.isVisible = false
             menu?.findItem(R.id.nav_historico)?.isVisible = false
@@ -62,11 +64,12 @@ class MainActivity3 : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_areaprofessor -> {
-                startActivity(Intent(this, MainActivity3::class.java))
+                // Se já está na área do professor, apenas avisa
+                Toast.makeText(this, "Você já está na área do professor.", Toast.LENGTH_SHORT).show()
                 return true
             }
-
             R.id.nav_sair -> {
+                FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
                 return true
@@ -75,26 +78,33 @@ class MainActivity3 : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun carregarAlunos() {
-        val sharedPrefs = getSharedPreferences("alunosPorUsuario", MODE_PRIVATE)
-        val allEntries = sharedPrefs.all
+    private fun carregarAlunosFirebase() {
+        val database = FirebaseDatabase.getInstance().reference.child("users")
+        listaAlunos.clear()
 
-        val gson = Gson()
-        val listaAlunos = allEntries.values.mapNotNull { value ->
-            try {
-                gson.fromJson(value as String, Aluno::class.java)
-            } catch (e: Exception) {
-                null
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listaAlunos.clear()
+                for (userSnapshot in snapshot.children) {
+                    val aluno = userSnapshot.child("perfilAluno").getValue(Aluno::class.java)
+                    if (aluno != null) {
+                        // Aqui se quiser, pode guardar o UID no objeto Aluno para passar depois
+                        // Exemplo: aluno.uid = userSnapshot.key
+                        listaAlunos.add(aluno)
+                    }
+                }
+                adapter = AlunoAdapter(listaAlunos) { alunoSelecionado ->
+                    val intent = Intent(this@MainActivity3, MainActivity4::class.java)
+                    // Se quiser passar o UID, faça isso aqui
+                    // Exemplo: intent.putExtra("uidAluno", alunoSelecionado.uid)
+                    startActivity(intent)
+                }
+                recyclerAlunos.adapter = adapter
             }
-        }
 
-        adapter = AlunoAdapter(listaAlunos) { alunoSelecionado ->
-            val intent = Intent(this, MainActivity4::class.java)
-            intent.putExtra("alunoJson", gson.toJson(alunoSelecionado))
-            startActivity(intent)
-        }
-
-        recyclerAlunos.adapter = adapter
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivity3, "Erro ao carregar alunos: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
-

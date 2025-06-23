@@ -2,26 +2,27 @@ package com.gabrielly.projintegrador
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.gabrielly.projintegrador.databinding.ActivityMain6Binding
-import com.google.gson.Gson
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import android.view.Menu
+import android.view.MenuItem
 
 class MainActivity6 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain6Binding
-    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMain6Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // ✅ Garante que a Toolbar funcione com o menu
-        setSupportActionBar(findViewById(R.id.toolbar))
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Cadastro"
 
         binding.btnSalvar.setOnClickListener {
             val nome = binding.edtNome.text.toString().trim()
@@ -50,74 +51,68 @@ class MainActivity6 : AppCompatActivity() {
                 telefoneResponsavel = telefoneResponsavel
             )
 
-            salvarAlunoDoUsuario(novoAluno)
-
-            val alunoJson = gson.toJson(novoAluno)
-            val intent = Intent(this, MainActivity4::class.java)
-            intent.putExtra("alunoJson", alunoJson)
-            startActivity(intent)
-            finish()
+            salvarAlunoFirebase(novoAluno)
         }
     }
 
-    private fun salvarAlunoDoUsuario(aluno: Aluno) {
-        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
-        val usuarioLogado = prefsLogin.getString("usuarioLogado", null)
-
-        if (usuarioLogado == null) {
-            Toast.makeText(this, "Usuário não está logado.", Toast.LENGTH_SHORT).show()
+    private fun salvarAlunoFirebase(aluno: Aluno) {
+        val usuario = FirebaseAuth.getInstance().currentUser
+        if (usuario == null) {
+            Toast.makeText(this, "Usuário não autenticado", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val sharedPrefs = getSharedPreferences("alunosPorUsuario", MODE_PRIVATE)
-        val editor = sharedPrefs.edit()
+        val uid = usuario.uid
+        val database = FirebaseDatabase.getInstance().reference
 
-        val alunoJson = gson.toJson(aluno)
-        editor.putString(usuarioLogado, alunoJson)
-        editor.apply()
+        // Salva ou atualiza o perfil do aluno no caminho users/{uid}/perfilAluno
+        database.child("users").child(uid).child("perfilAluno")
+            .setValue(aluno)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Perfil salvo com sucesso!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity4::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Erro ao salvar: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
-
-        // ✅ Exemplo opcional: esconder Área do Professor se não for professor
-        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
-        val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
-        if (tipoUsuario != "professor") {
-            menu?.findItem(R.id.nav_areaprofessor)?.isVisible = false
-        }
-
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.nav_mood -> {
                 startActivity(Intent(this, MainActivity2::class.java))
-                return true
+                true
             }
             R.id.nav_perfil -> {
                 startActivity(Intent(this, MainActivity4::class.java))
-                return true
+                true
             }
             R.id.nav_historico -> {
                 startActivity(Intent(this, MainActivity5::class.java))
-                return true
+                true
             }
             R.id.nav_cadastro -> {
                 startActivity(Intent(this, MainActivity6::class.java))
-                return true
+                true
             }
             R.id.nav_areaprofessor -> {
                 startActivity(Intent(this, MainActivity3::class.java))
-                return true
+                true
             }
             R.id.nav_sair -> {
-                startActivity(Intent(this, LoginActivity::class.java))
+                FirebaseAuth.getInstance().signOut()
+                Toast.makeText(this, "Você saiu", Toast.LENGTH_SHORT).show()
                 finish()
-                return true
+                true
             }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 }

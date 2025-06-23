@@ -2,57 +2,58 @@ package com.gabrielly.projintegrador
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.gabrielly.projintegrador.databinding.ActivityMain4Binding
-import com.google.gson.Gson
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import android.view.Menu
+import android.view.MenuItem
 
 class MainActivity4 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain4Binding
-    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMain4Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
-        // ✅ Verifica se foi passado aluno via Intent (caso vindo do professor)
-        val alunoJsonIntent = intent.getStringExtra("alunoJson")
-        if (alunoJsonIntent != null) {
-            val aluno = gson.fromJson(alunoJsonIntent, Aluno::class.java)
-            exibirDadosAluno(aluno)
-        } else {
-            // ✅ Caso contrário, mostra o aluno logado normalmente
-            mostrarAlunoDoUsuarioLogado()
-        }
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Perfil"
+
+        carregarPerfilAlunoFirebase()
     }
 
-    private fun mostrarAlunoDoUsuarioLogado() {
-        val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
-        val usuarioLogado = prefsLogin.getString("usuarioLogado", null)
-
-        if (usuarioLogado == null) {
-            Toast.makeText(this, "Usuário não está logado.", Toast.LENGTH_SHORT).show()
+    private fun carregarPerfilAlunoFirebase() {
+        val usuario = FirebaseAuth.getInstance().currentUser
+        if (usuario == null) {
+            Toast.makeText(this, "Usuário não autenticado", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val prefsAlunos = getSharedPreferences("alunosPorUsuario", MODE_PRIVATE)
-        val alunoJson = prefsAlunos.getString(usuarioLogado, null)
+        val uid = usuario.uid
+        val database = FirebaseDatabase.getInstance().reference
 
-        if (alunoJson == null) {
-            Toast.makeText(this, "Nenhum aluno cadastrado para este usuário.", Toast.LENGTH_SHORT).show()
-            return
-        }
+        database.child("users").child(uid).child("perfilAluno")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val aluno = snapshot.getValue(Aluno::class.java)
+                    if (aluno != null) {
+                        exibirDadosAluno(aluno)
+                    } else {
+                        Toast.makeText(this@MainActivity4, "Nenhum perfil cadastrado.", Toast.LENGTH_SHORT).show()
+                    }
+                }
 
-        val aluno = gson.fromJson(alunoJson, Aluno::class.java)
-        exibirDadosAluno(aluno)
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@MainActivity4, "Erro ao carregar perfil: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun exibirDadosAluno(aluno: Aluno) {
@@ -63,41 +64,49 @@ class MainActivity4 : AppCompatActivity() {
         binding.txtTurno.text = "Turno: ${aluno.turno}"
         binding.txtTelefoneAluno.text = "Telefone Aluno: ${aluno.telefoneAluno}"
         binding.txtTelefoneResponsavel.text = "Telefone Responsável: ${aluno.telefoneResponsavel}"
+        // Se quiser mostrar avatar, use o campo avatarResId
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.nav_mood -> {
                 startActivity(Intent(this, MainActivity2::class.java))
-                return true
+                true
             }
+
             R.id.nav_perfil -> {
                 startActivity(Intent(this, MainActivity4::class.java))
-                return true
+                true
             }
+
             R.id.nav_historico -> {
                 startActivity(Intent(this, MainActivity5::class.java))
-                return true
+                true
             }
+
             R.id.nav_cadastro -> {
                 startActivity(Intent(this, MainActivity6::class.java))
-                return true
+                true
             }
+
             R.id.nav_areaprofessor -> {
                 startActivity(Intent(this, MainActivity3::class.java))
-                return true
+                true
             }
+
             R.id.nav_sair -> {
-                startActivity(Intent(this, LoginActivity::class.java))
+                FirebaseAuth.getInstance().signOut()
+                Toast.makeText(this, "Você saiu", Toast.LENGTH_SHORT).show()
                 finish()
-                return true
+                true
             }
+
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 }
