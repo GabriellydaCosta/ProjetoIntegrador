@@ -45,7 +45,9 @@
             android:background="@color/bege"
             android:hint="Matrícula"
             android:inputType="textEmailAddress"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColorHint="@color/hintColor"
+            />
 
         <EditText
             android:id="@+id/editTextSenha"
@@ -55,7 +57,9 @@
             android:background="@color/bege"
             android:hint="Senha"
             android:inputType="textPassword"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColorHint="@color/hintColor"
+            />
 
         <Button
             android:id="@+id/buttonLogin"

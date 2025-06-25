@@ -6,5 +6,6 @@
     <color name="blue">#2C3E50</color>
     <color name="bege">#F5EFE5</color>
     <color name="bluetitle">#015883</color>
+    <color name="hintColor">#333333</color>
 
 </resources>

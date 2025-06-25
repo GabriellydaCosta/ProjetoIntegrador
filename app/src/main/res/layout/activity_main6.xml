@@ -59,7 +59,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Nome do Aluno"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColorHint="@color/hintColor"
+            />
 
         <!-- Idade -->
         <EditText
@@ -68,7 +70,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Idade"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textColorHint="@color/hintColor"
+            />
 
         <!-- Responsável -->
         <EditText
@@ -77,7 +81,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Responsável"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColorHint="@color/hintColor"
+            />
 
         <!-- Número da sala -->
         <EditText
@@ -86,7 +92,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Número da sala"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColorHint="@color/hintColor"
+            />
 
         <!-- Turno de estudo -->
         <EditText
@@ -95,7 +103,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Turno de estudo"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColorHint="@color/hintColor"
+            />
 
         <!-- Telefone do aluno -->
         <EditText
@@ -104,7 +114,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Telefone do aluno"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColorHint="@color/hintColor"
+            />
 
         <!-- Telefone do responsável -->
         <EditText
@@ -113,7 +125,9 @@
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:hint="Telefone do responsável"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColorHint="@color/hintColor"
+            />
 
 
         <Button
