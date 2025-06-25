@@ -135,6 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
-            android:text="Salvar" />
+            android:text="Salvar"
+            android:backgroundTint="@color/yellow"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
