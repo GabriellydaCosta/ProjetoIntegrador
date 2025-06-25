@@ -35,6 +35,7 @@ class MainActivity3 : AppCompatActivity() {
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "Área do Professor"
 
         recyclerAlunos = findViewById(R.id.recyclerAlunos)
         recyclerAlunos.layoutManager = GridLayoutManager(this, 3)
@@ -45,11 +46,11 @@ class MainActivity3 : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal, menu)
 
+        // Exibir apenas opções do professor
         val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         val tipoUsuario = prefsLogin.getString("tipoUsuario", null)
 
         if (tipoUsuario == "professor") {
-            // Deixa visíveis só as opções necessárias para professor
             menu?.findItem(R.id.nav_mood)?.isVisible = false
             menu?.findItem(R.id.nav_perfil)?.isVisible = false
             menu?.findItem(R.id.nav_historico)?.isVisible = false
@@ -64,13 +65,16 @@ class MainActivity3 : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_areaprofessor -> {
-                // Se já está na área do professor, apenas avisa
                 Toast.makeText(this, "Você já está na área do professor.", Toast.LENGTH_SHORT).show()
                 return true
             }
             R.id.nav_sair -> {
                 FirebaseAuth.getInstance().signOut()
-                startActivity(Intent(this, LoginActivity::class.java))
+
+                // Volta para o Login limpando o histórico
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
                 finish()
                 return true
             }
@@ -79,24 +83,35 @@ class MainActivity3 : AppCompatActivity() {
     }
 
     private fun carregarAlunosFirebase() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            Toast.makeText(this, "Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         val database = FirebaseDatabase.getInstance().reference.child("users")
         listaAlunos.clear()
 
-        database.addValueEventListener(object : ValueEventListener {
+        // ✅ Leitura única para evitar erro após logout
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listaAlunos.clear()
                 for (userSnapshot in snapshot.children) {
-                    val aluno = userSnapshot.child("perfilAluno").getValue(Aluno::class.java)
-                    if (aluno != null) {
-                        // Aqui se quiser, pode guardar o UID no objeto Aluno para passar depois
-                        // Exemplo: aluno.uid = userSnapshot.key
-                        listaAlunos.add(aluno)
+                    val tipoUsuario = userSnapshot.child("tipo").getValue(String::class.java)
+                    if (tipoUsuario == "aluno") {
+                        val aluno = userSnapshot.child("perfilAluno").getValue(Aluno::class.java)
+                        if (aluno != null) {
+                            aluno.uid = userSnapshot.key // Guarda o UID no objeto aluno
+                            listaAlunos.add(aluno)
+                        }
                     }
                 }
+
                 adapter = AlunoAdapter(listaAlunos) { alunoSelecionado ->
                     val intent = Intent(this@MainActivity3, MainActivity4::class.java)
-                    // Se quiser passar o UID, faça isso aqui
-                    // Exemplo: intent.putExtra("uidAluno", alunoSelecionado.uid)
+                    intent.putExtra("uidAluno", alunoSelecionado.uid)
                     startActivity(intent)
                 }
                 recyclerAlunos.adapter = adapter

@@ -1,6 +1,7 @@
 package com.gabrielly.projintegrador
 
 data class Aluno(
+    var uid: String? = null,          // Novo campo para guardar UID
     var nome: String = "",
     var idade: Int = 0,
     var avatarResId: Int = 0,
@@ -10,6 +11,3 @@ data class Aluno(
     var telefoneAluno: String = "",
     var telefoneResponsavel: String = ""
 )
-
-
-

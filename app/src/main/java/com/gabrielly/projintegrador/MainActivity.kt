@@ -27,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin = findViewById(R.id.buttonLogin)
         buttonCriarConta = findViewById(R.id.buttonAjuda)
 
+        // LOGIN
         buttonLogin.setOnClickListener {
             val email = editTextMatricula.text.toString().trim()
             val senha = editTextSenha.text.toString().trim()
@@ -46,17 +47,16 @@ class LoginActivity : AppCompatActivity() {
                             val prefsLogin = getSharedPreferences("loginPrefs", MODE_PRIVATE)
                             val editor = prefsLogin.edit()
 
-                            // Busca o tipo do usuário no Firebase Database **direto no nó uid**
+                            // Busca o campo "tipo" dentro do nó do usuário no Firebase
                             database.child("users").child(uid).get()
                                 .addOnSuccessListener { snapshot ->
-                                    // Pega o valor direto (ex: "professor" ou "aluno")
-                                    val tipoUsuario = snapshot.getValue(String::class.java) ?: "aluno"
+                                    val tipoUsuario = snapshot.child("tipo").getValue(String::class.java) ?: "aluno"
                                     editor.putString("tipoUsuario", tipoUsuario)
                                     editor.apply()
 
                                     Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
 
-                                    // Redireciona para tela adequada
+                                    // Redireciona para tela correta conforme tipo do usuário
                                     if (tipoUsuario == "professor") {
                                         startActivity(Intent(this, MainActivity3::class.java))
                                     } else {
@@ -76,6 +76,7 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
+        // CRIAR CONTA
         buttonCriarConta.setOnClickListener {
             val email = editTextMatricula.text.toString().trim()
             val senha = editTextSenha.text.toString().trim()
@@ -93,13 +94,25 @@ class LoginActivity : AppCompatActivity() {
                             val uid = usuario.uid
                             val database = FirebaseDatabase.getInstance().reference
 
-                            // Define tipoUsuario com base no email
-                            val tipoUsuario = if (email == "professor@ifes.edu.br") "professor" else "aluno"
+                            // Ajuste aqui: definir lista de emails que são professores
+                            val emailsProfessores = listOf("professor@ifes.edu.br")
 
-                            // Salva tipoUsuario no Firebase Database como valor direto no nó uid
-                            database.child("users").child(uid).setValue(tipoUsuario)
+                            val tipoUsuario = if (email in emailsProfessores) "professor" else "aluno"
+
+                            // Salva um objeto com campo "tipo"
+                            val dadosUsuario = mapOf("tipo" to tipoUsuario)
+
+                            database.child("users").child(uid).setValue(dadosUsuario)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show()
+
+                                    // Redireciona para tela adequada logo após criação
+                                    if (tipoUsuario == "professor") {
+                                        startActivity(Intent(this, MainActivity3::class.java))
+                                    } else {
+                                        startActivity(Intent(this, MainActivity2::class.java))
+                                    }
+                                    finish()
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(this, "Erro ao salvar tipo de usuário: ${it.message}", Toast.LENGTH_SHORT).show()

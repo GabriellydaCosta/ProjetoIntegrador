@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_areaprofessor"
+        android:title="Área do professor"
+        />
+
+    <item android:id="@+id/nav_sair"
+        android:title="Sair"
+        />
+</menu>
